@@ -6,9 +6,9 @@ def even(n):
         print("Odd no")
 
 
+
 if __name__ == "__main__":
     
     hello = even(10)
     
     print(even)        
-            
