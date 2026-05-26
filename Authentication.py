@@ -4,7 +4,36 @@
  
 ---------------------------------------------------------------------------------
 
-1. Password based Authenication 
+1. Session Based Authenication (Traditional , Statefull)
+      
+      -> user log in with email and password 
+      -> Server verify credentials 
+      -> Server creates a sessionID in memory/db
+      -> Server send sessionId in cookie in browser 
+      -> Browser store it automatically
+      -> Every request now send sessionID with cookie 
+      -> Server check sessionID , authenicated 
+    
+    
+    => Scalability issue 
+         Each time user login , server saved sessionID in memory / db
+         
+         IF 1 million users -> 1 millions session
+         
+         and if multiple server , session must be shared 
+    
+    => CSRF (Cross Site Request Forgery)
+    
+    
+    
+    
+    => Server Dependency 
+        
+        If server crash  , session may be lost
+        
+        modern system need , any server handle request         
+
+2. Password based Authenication 
 
     -> You enterd email and password
        
@@ -20,7 +49,7 @@
        
 -----------------------------------------------------------------------------------------
 
-2. JWT Based 
+3. JWT Based 
 
 --------------------------------------------------------------------------------------------
 
@@ -40,6 +69,8 @@
 4. Login with Third - Party Application 
 
    -> We trust third party application to authenicate the user , instead of handling password manually
+   
+   -> A way to let user login with another service without sharing passworrd
    
        Login with google
        Login with github

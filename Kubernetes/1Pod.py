@@ -45,6 +45,8 @@
       3. Succeeded/Failed -> finished
       4. Terminated 
     
+    
+    
     -> If a pod die
         1. kuberneted does not restart it directly 
         2. Deployment creates a new pod 
@@ -101,14 +103,23 @@
 
     No, in production we usually use controllers like Deployments because Pods alone are not 
     self-healing or scalable.                        
+        
     
-    
-    
-    
-    
-    
-    
-    
+=> What problem pod solve                                                       
+      
+      -> A pod solve the problem of tight coupling betweeen containers
+      
+      APP containers 
+      
+      sidecar containers(logging , monitoring , proxy)
+      
+      They need to talk via localhost 
+      
+      share file/logs
+      
+      start / stop together
+      
+      thats what exactly pod give
     
     
     

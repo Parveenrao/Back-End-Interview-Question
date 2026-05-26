@@ -65,5 +65,42 @@
 
 => Difference between forward proxy and reverse proxy?
 
-   -> Forward proxy hides the client, reverse proxy hides the server.                      
+   -> Forward proxy hides the client, reverse proxy hides the server.  
+   
+-------------------------------------------------------------------------------------------------------------------
+
+=> WHy we need Kong 
+   
+   -> Lets suppose you have 
+       
+       1. Auth service 
+       2. Notification service
+       3. Payment service
+       4. Order service 
+   
+   -> Withou gateway 
+      
+      1. Each service handle auth
+      2. Each service handle rate limiting
+      3. Each service expose publicily
+
+---------------------------------------------------------------------------------------------------------------------
+
+=> What kong does  
+   
+   1. Authenication 
+   2. Rate limiting 
+   3. load balancing 
+   
+   4. Logging and Monitoring 
+       
+       -> Track request 
+   
+   5. Plugin System
+      
+      -> Add feature without touching code
+
+-----------------------------------------------------------------------------------------------------------------------
+
+=>  Client → Kong → Service (your backend)                                           
 """

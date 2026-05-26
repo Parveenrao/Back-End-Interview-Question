@@ -80,6 +80,30 @@
                          Extract user info
                                ↓
                          Allow request
+
+-------------------------------------------------------------------------------------
+
+-> What if token is stolen 
+   
+    1. Attackers can use it until expires
+    
+    2. Thats why 
+        
+        -> its short lived 
+        -> Refersh token 
+        -> HTTPS required 
+
+-> How to logout with JWT
+      
+      JWT is stateless , cannot delete easily
+      
+      Black list token 
+      refersh token 
+      rotate token
+
+-> Can jwt be tampered 
+    
+    Yes , if paylod changes  , signature changes , reject                                        
      
      
  """

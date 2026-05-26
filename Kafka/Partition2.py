@@ -97,7 +97,7 @@
      
      -> If offset is not committed properly 
         
-        message can be reprocessed                    
+        message can be reprocessed              , if partition changes , then goes to another consumer and read msg twice        
   
   3. Increase latency 
      
@@ -147,6 +147,21 @@
     3. Sticky (Best)
     
        -> Keep previous assigment as much as possible      
+       
+       
+       before 
+        
+        c1 -> p0 , p1
+        
+        c2 -> p2 ,p3 
+        
+        sticky 
+        
+        c1 -> p0
+        
+        c2 -> p2 , p3 
+        
+        c3 -> p1      , only one parition moves
                      
       
               

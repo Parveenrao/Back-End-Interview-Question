@@ -1,152 +1,159 @@
-"""   
+""" 
+
 => Saga Pattern 
-   
-   -> In microservice architecture , each service has its own database
-   -> So we cannot use ACID Txn across services 
-
-  -> Exmaple 
-     
-     Order-Service     -> Create-Order 
-     Payment-Service   -> deduct money
-     Inventory-Service -> reserve stock 
-     
-   what if 
-     
-     -> order created 
-     -> Payment failed 
-     
-     Now system is incosistent   
-     
------------------------------------------------------------------------------------------------------------
-=> Saga Pattern = Sequence of local transaction + compensating actions
     
-    So instead of one big transaction 
-    each service runs its own txn and if something fails undo previous steps using compensation
+    -> Before move on saga patter , lets discuss what problem saga solve 
     
+    -> In monolithic architecutre , we use data txn (ACID)
     
-    T1 → T2 → T3 → T4
+    -> But in Microservice , each servive has its own db  , we cannot do single txn across services easlity
 
-    If T3 fails:
-    run C2 (undo T2)
-    run C1 (undo T1)   
+----------------------------------------------------------------------------------------------------------------
+
+=> Working
     
-
-
--------------------------------------------------------------------------------------------------------------
-
-1. Choreography (Event-Driven)
-
-    
-    -> No central controller 
-    -> Service talks via events 
-    -> Each service decide  , what to do next , how to react on failures 
-  
-  -> Everyone listen , react and emit , no boss ,
-
-------------------------------------------------------------------------------------------------------------
-
-=> Working 
-
-   1. Order Service 
-      -> Create order 
-      -> Emits event 
-             'Order-Created'
-   
-   2. Payment Service 
-      -> Listen to OrderCreated 
-      -> Try Payment
-      
-      -> Emits 
+    -> Saga is sequence of local transaction where each step
           
-          PaymentSucceeded or PaymentFailed
-   
-   3. Inventory Service 
+          1. Update its own db
+          2. Publish an event
+          3. is something fails , triggering compensation action
+
+=> Example , Order System
+     
+     Order Service     -> creates order 
+     Payment Service   -> deduct money 
+     Inventory Service -> Reserve stock         
+     
+     Order created -> Payment deduct -> Inventory failed
+     
+     now we must 
+       
+       refund payment 
+       
+       Cancel order 
+       
+      These are called compensation action
+
+-----------------------------------------------------------------------------------------------------------
+
+=> 1. Choreography Saga 
+    
+    -> This is no central controller 
+    
+    -> Service will react to events 
+    
+    -> Each service 
+       
+       1. Listen to events 
+       2. Decide what to do 
+       3. Emits new events 
+  
+  
+  -> Working 
       
-      -> Listen to PaymentSucceed
-      -> Reserve stock 
+      1. Create Order 
+          
+          -> order service create ordere in db 
+          -> Publish event
+                    
+                     {
+              "event": "OrderCreated",
+              "orderId": 101,
+              "amount": 500
+             }
       
-      -> Emits 
+      2. Payment Service
+           
+           -> Listen to order created
+           
+           -> Deduct money
+           
+           -> EMit 
+                   
+                   {
+             "event": "PaymentCompleted",
+            "orderId": 101
+             }      
+      
+      3. Inventory Service
+           
+           -> Listen to payment completed
+           
+           -> Reserve stock 
+           
+           -> Emits
+           
+               {
+         "event": "InventoryReserved",
+        "orderId": 101
+        }        
+      
+      4. Final state 
+          
+          -> Order service marked confirm      
+
+-------------------------------------------------------------------------------------------------
+
+2. Orchestration Saga 
+    
+    -> A central service(orchestrator) control the entire worklow
+    
+    -> Instead of service react blindly to events 
+    
+    -> One service decides what happen next 
+    
+    -> call other serivce 
+    
+    -> Handle failure and compensation
+  
+  
+  => Working 
+      
+      1. Start saga
+          
+          Client -> orchestration
+          
+      
+      2. Orchestration -> order service 
+          
+          -> create order , if success move forward 
+      
+      3. Orchestration -> payment 
          
-         InventoryReserved or InventoryFailed
+         deduct money 
+      
+      4. Orchestration -> inventory 
+          
+          reserve stock 
+      
+      5. Success
+           
+           -> mark completed 
+           
+           order => confirmed
+    
+    -> Failure case 
+         
+         let say inventory failed 
+         
+         now orchestration called payment service and order service 
    
-   4. Order-Service Again 
-       
-       -> Listen to failure events 
-       
-     PaymentFailed -> Cancel order 
-     
-     InventoryFailed -> CancelOrder -> Trigger Refund
-
--> Failure Flow 
-    
-    lets say inventory failed 
-       
-       Order-Created 
-           |
-       PaymentSucceeded
-           |
-       InventoryFailed 
-   
-   Compensation Trigger 
-   
-   InventoryFailed -> PaymentService.refund()
-   InventoryFailed -> OrderService.cancel() 
-   
-------------------------------------------------------------------------------------------------------
-
-=> Real Problem 
-   
-   -> Event Explosion
-       
-       OrderCreated
-       PaymentStarted
-       PaymentCompleted
-       PaymentFailed
-       InventoryCheckStarted
-       InventoryReserved
-       InventoryFailed
-       OrderCancelled
-       RefundInitiated
-       RefundCompleted       
+   -> key component 
+      
+      1. Orchestrator (Brain)
+          
+          -> Track state , Decide next state , handle retries , trigger compensation
+      
+      2. Comunication 
+          
+          -> http / grpc
+      
+      3. State management 
+          
+          -> Current step 
+          -> completed step 
+          -> failed step                                                               
 
 
-------------------------------------------------------------------------------------------------------
 
-=> Good Event Design 
-    
-    
-    {
-  "eventType": "PaymentSucceeded",
-  "orderId": "123",
-  "userId": "456",
-  "amount": 1000,
-  "timestamp": "..."
-}
-
-=> Events can be delivere Twice 
-    
-    -> Use idempotence
-
-=> Event Ordering 
-     
-     -> Kafka gurantee ordering within partition 
-     
-         -> Use same partition  key 
-    
-=> Retry + DLQ 
-    
-    -> Event processing fails 
-     
-     Retry -> Retry -> Retry -> DLQ 
-
-
-=> Who handle Compensation 
-
-   
-   -> Depend on System                                            
-       
-                              
-    
-        
-              
 """

@@ -10,6 +10,19 @@
      -> Core Idea 
         
         Don't block  -> give control  -> run other task    
+        
+        
+    -> Async programming is a way to handle concurrency using a single thread by 
+         switching tasks when they are waiting (mostly I/O).
+     
+    ->  Multithreading → multiple threads run (managed by OS)
+        Async (asyncio) → single thread, cooperative scheduling   
+    
+    ->  Async programming in Python is a concurrency model that uses an event loop to manage multiple tasks within a single thread. 
+        Tasks voluntarily yield control using await, allowing other tasks to run during I/O waits.         
+    
+    ->  Threading → multiple chefs cooking
+         Async → one chef cooking multiple dishes, switching when something is waiting (like boiling water)
 
 """
 

@@ -49,6 +49,30 @@
             
             -> Every request must contain all information 
             
-            -> Server validate token each time                                     
+            -> Server validate token each time       
+            
+            -> Each request is independent
+
+-------------------------------------------------------------------------------------------------------
+
+ 2. Soap API 
+     
+     -> Soap API is an API That follows the soap protocol (Simple Object Acess Protocol) to let system communicate
+     
+     -> Soap work by sending xml data in pre-defined structure
+     
+     -> XML based 
+         
+         1. NO JSON 
+         2. HEavy and verbose
+     
+     -> Strict Standards 
+         
+         -> Security 
+         -> Reliable messaging
+         -> Transactions
+
+------------------------------------------------------------------------------------------------------------------
+                                                       
             
 """

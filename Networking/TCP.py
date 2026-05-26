@@ -22,7 +22,7 @@
 
        TCP guarantees that the HTTP data arrives safely.    
 --------------------------------------------------------------------------------------
-1. Why TCP is exit 
+1. Why TCP is exist 
    -> Internet is unreliable 
        
        Packets can be lost , out of order , be duplicated and delayed
