@@ -2,7 +2,7 @@
 
 => AWS Region 
    
-   A geographic area whera aws as data centres 
+   A geographic area whera aws has data centres 
    
    -> Each region is independent 
          

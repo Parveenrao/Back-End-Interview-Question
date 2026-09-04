@@ -79,4 +79,29 @@
      
      PARTITION BY KEY(id)
      PARTITIONS 4;         
+
+
+=> MySQL doesn't use a global unique index across partitions, 
+   every PRIMARY KEY or UNIQUE KEY must include the columns used for partitioning. 
+   This allows MySQL to enforce uniqueness using the local index of the relevant
+   partition."     
+
+   CREATE TABLE employees (
+    id INT,
+    department_id INT,
+    name VARCHAR(100),
+    PRIMARY KEY (id, department_id)
+     )
+    PARTITION BY HASH(department_id)
+    PARTITIONS 4;
+
+
+
+    department_id decides which partition stores the row.
+    (id, department_id) is the primary key.
+    department_id itself can repeat. 
+    The combination (id, department_id) cannot repeat.
+
+    "MySQL requires the partition key in every unique key because indexes are 
+    local to partitions, and MySQL needs to enforce uniqueness without searching all partitions."
 """

@@ -1,0 +1,12 @@
+# Strategy Interface 
+
+from abc import ABC , abstractmethod
+
+
+class PaymentStrategy(ABC):
+
+    @abstractmethod
+    def pay(self , amount:float) -> None:
+        pass 
+
+    

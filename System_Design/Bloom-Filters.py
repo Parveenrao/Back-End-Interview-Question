@@ -1,7 +1,7 @@
 """ 
 => Bloom filters 
      
-     -> Bloom filter is a probabilistic data structure used to anser 
+     -> Bloom filter is a probabilistic data structure used to answer 
           
           "Have i seen this element before"
          

@@ -54,7 +54,7 @@ class Database:
 
                 cls._instance = super().__new__(cls)
 
-    def __ini__(self):
+    def __init__(self):
 
         # prevenet multiple initialization 
 

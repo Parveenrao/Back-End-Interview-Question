@@ -12,7 +12,7 @@
 
 from multiprocessing import Process , Value
 
-lock = 
+lock = lock
 
 def increment(counter):
     
